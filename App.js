@@ -9,9 +9,29 @@ import StartGameScreen from './screens/StartGameScreen';
 import GameScreen from './screens/GameScreen';
 import GameOverScreen from './screens/GameOverScreen';
 
+const fetchFonts = () => {
+  //returns promise
+  return Font.loadAsync({
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+  });
+};
+
 export default function App() {
   const [userNumber, setUserNumber] = useState(null);
   const [guessRounds, setGuessRounds] = useState(0);
+  //fetchFonts(); //NOT RECOMMENDED because loading fonts take time and since the code still cont to exec...
+  //assets (initial data, fonts, images etc.) should be available when the app starts)
+  const [dataLoaded, setDataLoaded] = useState(false);
+  if (!dataLoaded) {
+    return (
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => setDataLoaded(true)}
+        onError={(err) => console.log(err)}
+      />
+    );
+  }
 
   const configureNewGameHandler = () => {
     setUserNumber(null);

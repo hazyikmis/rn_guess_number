@@ -64,7 +64,7 @@ const StartGameScreen = (props) => {
         <Text style={styles.title}>Start a New Game!</Text>
         {/* <View style={styles.inputContainer}> */}
         <Card style={styles.inputContainer}>
-          <Text>Select a number</Text>
+          <Text style={styles.selectNumber}>Select a number</Text>
           {/* <TextInput /> */}
           {/* <Input style={styles.input} /> */}
           {/* since in the definition of Input component, there is {...props}, this helps us to send all properties of TextInput as props to Input component */}
@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     marginVertical: 10,
+    fontFamily: 'open-sans-bold',
   },
   inputContainer: {
     width: 300,
@@ -142,6 +143,9 @@ const styles = StyleSheet.create({
   },
   summaryContainer: {
     marginTop: 20,
+  },
+  selectNumber: {
+    fontFamily: 'open-sans',
   },
 });
 
