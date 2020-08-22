@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import {
   View,
-  Text,
+  // Text,
   StyleSheet,
-  TextInput,
+  // TextInput,
   Button,
   TouchableWithoutFeedback,
   Keyboard,
@@ -14,6 +14,8 @@ import Card from '../components/Card';
 import Colors from '../constants/colors';
 import Input from '../components/Input';
 import NumberContainer from '../components/NumberContainer';
+import BodyText from '../components/BodyText';
+import TitleText from '../components/TitleText';
 
 const StartGameScreen = (props) => {
   const { onStartGame } = props;
@@ -48,7 +50,7 @@ const StartGameScreen = (props) => {
   if (confirmed) {
     confirmedOutput = (
       <Card style={styles.summaryContainer}>
-        <Text>You selected</Text>
+        <BodyText>You selected</BodyText>
         <NumberContainer>{selectedNumber}</NumberContainer>
         <Button
           title="Start Game"
@@ -61,10 +63,12 @@ const StartGameScreen = (props) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.screen}>
-        <Text style={styles.title}>Start a New Game!</Text>
+        {/* <Text style={styles.title}>Start a New Game!</Text> */}
+        <TitleText style={{ fontSize: 24 }}>Start a New Game!</TitleText>
         {/* <View style={styles.inputContainer}> */}
         <Card style={styles.inputContainer}>
-          <Text style={styles.selectNumber}>Select a number</Text>
+          {/* <Text style={styles.selectNumber}>Select a number</Text> */}
+          <BodyText>Select a number</BodyText>
           {/* <TextInput /> */}
           {/* <Input style={styles.input} /> */}
           {/* since in the definition of Input component, there is {...props}, this helps us to send all properties of TextInput as props to Input component */}
@@ -109,11 +113,11 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
   },
-  title: {
-    fontSize: 20,
-    marginVertical: 10,
-    fontFamily: 'open-sans-bold',
-  },
+  // title: {
+  //   fontSize: 20,
+  //   marginVertical: 10,
+  //   fontFamily: 'open-sans-bold',
+  // },
   inputContainer: {
     width: 300,
     maxWidth: '80%',
@@ -144,9 +148,9 @@ const styles = StyleSheet.create({
   summaryContainer: {
     marginTop: 20,
   },
-  selectNumber: {
-    fontFamily: 'open-sans',
-  },
+  // selectNumber: {
+  //   fontFamily: 'open-sans',
+  // },
 });
 
 export default StartGameScreen;
