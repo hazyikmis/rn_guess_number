@@ -1,5 +1,5 @@
 //useState added for validation of the value entered into to Input
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   // Text,
@@ -9,6 +9,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Alert,
+  Dimensions,
+  ScrollView,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Card from '../components/Card';
 import Colors from '../constants/colors';
@@ -23,6 +26,31 @@ const StartGameScreen = (props) => {
   const [enteredValue, setEnteredValue] = useState('');
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState();
+  const [buttonWidth, setButtonWidth] = useState(
+    Dimensions.get('window').width / 4
+  );
+
+  /*
+  const updateLayout = () => {
+    setButtonWidth(Dimensions.get('window').width / 4);
+  };
+  
+  //the event below runs when the orientation changes
+  Dimensions.addEventListener('change', updateLayout);
+  */
+
+  useEffect(() => {
+    //this is cleaner
+    const updateLayout = () => {
+      setButtonWidth(Dimensions.get('window').width / 4);
+    };
+
+    Dimensions.addEventListener('change', updateLayout);
+    //below is for prevent unnecessary re-renders (cleanup function)
+    return () => {
+      Dimensions.removeEventListener('change', updateLayout);
+    };
+  });
 
   const numberInputHandler = (inputText) => {
     setEnteredValue(inputText.replace(/[^0-9]/g, ''));
@@ -65,49 +93,55 @@ const StartGameScreen = (props) => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.screen}>
-        {/* <Text style={styles.title}>Start a New Game!</Text> */}
-        <TitleText style={{ fontSize: 24 }}>Start a New Game!</TitleText>
-        {/* <View style={styles.inputContainer}> */}
-        <Card style={styles.inputContainer}>
-          {/* <Text style={styles.selectNumber}>Select a number</Text> */}
-          <BodyText>Select a number</BodyText>
-          {/* <TextInput /> */}
-          {/* <Input style={styles.input} /> */}
-          {/* since in the definition of Input component, there is {...props}, this helps us to send all properties of TextInput as props to Input component */}
-          <Input
-            style={styles.input}
-            blurOnSubmit
-            autoCapitalize="none"
-            autoCorrect={false}
-            keyboardType="number-pad"
-            maxLength={2}
-            onChangeText={numberInputHandler}
-            value={enteredValue}
-          />
-          <View style={styles.buttonContainer}>
-            {/* Each button wrapped with Button, in order to style them precisely, for example making each same width */}
-            <View style={styles.button}>
-              <Button
-                title="Reset"
-                onPress={resetInputHandler}
-                color={Colors.accent}
+    <ScrollView>
+      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={30}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <View style={styles.screen}>
+            {/* <Text style={styles.title}>Start a New Game!</Text> */}
+            <TitleText style={{ fontSize: 24 }}>Start a New Game!</TitleText>
+            {/* <View style={styles.inputContainer}> */}
+            <Card style={styles.inputContainer}>
+              {/* <Text style={styles.selectNumber}>Select a number</Text> */}
+              <BodyText>Select a number</BodyText>
+              {/* <TextInput /> */}
+              {/* <Input style={styles.input} /> */}
+              {/* since in the definition of Input component, there is {...props}, this helps us to send all properties of TextInput as props to Input component */}
+              <Input
+                style={styles.input}
+                blurOnSubmit
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="number-pad"
+                maxLength={2}
+                onChangeText={numberInputHandler}
+                value={enteredValue}
               />
-            </View>
-            <View style={styles.button}>
-              <Button
-                title="Confirm"
-                onPress={confirmInputHandler}
-                color={Colors.primary}
-              />
-            </View>
+              <View style={styles.buttonContainer}>
+                {/* Each button wrapped with Button, in order to style them precisely, for example making each same width */}
+                {/* <View style={styles.button}> */}
+                <View style={{ width: buttonWidth }}>
+                  <Button
+                    title="Reset"
+                    onPress={resetInputHandler}
+                    color={Colors.accent}
+                  />
+                </View>
+                {/* <View style={styles.button}> */}
+                <View style={{ width: buttonWidth }}>
+                  <Button
+                    title="Confirm"
+                    onPress={confirmInputHandler}
+                    color={Colors.primary}
+                  />
+                </View>
+              </View>
+            </Card>
+            {/* </View> */}
+            {confirmedOutput}
           </View>
-        </Card>
-        {/* </View> */}
-        {confirmedOutput}
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
@@ -123,8 +157,10 @@ const styles = StyleSheet.create({
   //   fontFamily: 'open-sans-bold',
   // },
   inputContainer: {
-    width: 300,
-    maxWidth: '80%',
+    // width: 300,
+    width: '80%',
+    maxWidth: '95%',
+    minWidth: 300,
     alignItems: 'center',
     //all the other styles below already exist in the Card component
     // shadowColor: 'black', //for iOS
@@ -143,7 +179,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   button: {
-    width: 100,
+    // width: 100,
+    //since there are 2 buttons in the same row divide by 2 (/2) is good but, think about the margins, etc.
+    //PROBLEM: This is calculated ONCE in lifecycle of the app, when aoo starts, when orientation changes, never again calculated
+    width: Dimensions.get('window').width / 4,
   },
   input: {
     width: 50,

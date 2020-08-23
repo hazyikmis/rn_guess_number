@@ -25,3 +25,10 @@ Hence for all expo-\* packages, npm install can be used but expo install is the 
 - Text component can contain other Text components
 - When adding styles to a < Text > (no matter if that happens via inline styles or a StyleSheet object), the styles will actually be shared with any nested < Text > components. This differs from the behavior of < View > (or actually any other component - < Text > is the exception): There, any styles are only applied to the component to which you add them. Styles are never shared with any child component!
 - For ScrollView & FlatView, better to use "contentContainerStyle" prop while assigning a style
+- In the "app.json", "orientation": landscape/portrait/default
+- You can check the dimensions (height & width) of the window by using "Dimensions" from react-native. But this never provides you info about the orientation of you device.
+- "ScreenOrientation" from "expo-screen-orientation" provides useful info about the orientation of the device.
+- IF "import { ScreenOrientation } from 'expo';" DOES NOT WORK, THEN execute "expo install expo-screen-orientation" on the terminal AND USE "import \* as ScreenOrientation from 'expo-screen-orientation';" IN YOUR CODE.
+- If you want to lock some of your screens as PORTRAIT for example, you must write the code below as as a first line in your code.
+
+`ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);`
