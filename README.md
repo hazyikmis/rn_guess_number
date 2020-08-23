@@ -19,3 +19,9 @@ Some packages (typically all expo-\* packages) can break the app if you install 
 To get the right package version for the specific version of Expo your app relies on, expo install is the right "tool". It also just executes npm install behind the scenes but it picks a specific (i.e. the correct) version of the package to be installed.
 
 Hence for all expo-\* packages, npm install can be used but expo install is the preferred command to avoid errors. Of course you could always try npm install first and only run expo install if you thereafter do face any errors.
+
+# RN Features
+
+- Text component can contain other Text components
+- When adding styles to a < Text > (no matter if that happens via inline styles or a StyleSheet object), the styles will actually be shared with any nested < Text > components. This differs from the behavior of < View > (or actually any other component - < Text > is the exception): There, any styles are only applied to the component to which you add them. Styles are never shared with any child component!
+- For ScrollView & FlatView, better to use "contentContainerStyle" prop while assigning a style
