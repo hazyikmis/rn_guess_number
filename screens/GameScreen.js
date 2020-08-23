@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  FlatList,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import NumberContainer from '../components/NumberContainer';
@@ -19,10 +26,20 @@ const generateRandomBetween = (min, max, exclude) => {
   }
 };
 
+/*
 const renderListItem = (item, numOfRound) => (
   <View key={item} style={styles.listItem}>
     <BodyText>#{numOfRound}</BodyText>
     <BodyText>{item}</BodyText>
+  </View>
+);
+*/
+
+//This function called by FlatList component. The 2nd parameter (itemData) passed to this function by default. HOW?
+const renderListItem = (listLength, itemData) => (
+  <View style={styles.listItem}>
+    <BodyText>#{listLength - itemData.index}</BodyText>
+    <BodyText>{itemData.item}</BodyText>
   </View>
 );
 
@@ -32,7 +49,7 @@ const GameScreen = (props) => {
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   //const [rounds, setRounds] = useState(0);
   //const rounds = useRef(0);  //also possible
-  const [pastGuesses, setPastGuesses] = useState([initialGuess]);
+  const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
   const currentMin = useRef(1);
   const currentMax = useRef(100);
 
@@ -69,7 +86,10 @@ const GameScreen = (props) => {
     setCurrentGuess(nextGuessedNumber);
     //setRounds((currentRounds) => currentRounds + 1);
     //rounds.current++;  //also possible
-    setPastGuesses((curPastGuesses) => [nextGuessedNumber, ...curPastGuesses]);
+    setPastGuesses((curPastGuesses) => [
+      nextGuessedNumber.toString(),
+      ...curPastGuesses,
+    ]);
   };
 
   return (
@@ -90,12 +110,19 @@ const GameScreen = (props) => {
         </MainButton>
       </Card>
       <View style={styles.listContainer}>
+        {/*
         <ScrollView contentContainerStyle={styles.list}>
-          {/* {pastGuesses.map((guess, index) => renderListItem(guess, index + 1))} */}
           {pastGuesses.map((guess, index) =>
-            renderListItem(guess, pastGuesses.length - index)
+            renderListItem(guess, pastGuesses.length - index) //renderListItem(guess, index + 1))
           )}
         </ScrollView>
+          */}
+        <FlatList
+          keyExtractor={(item) => item}
+          data={pastGuesses}
+          renderItem={renderListItem.bind(this, pastGuesses.length)}
+          contentContainerStyle={styles.list}
+        />
       </View>
     </View>
   );
