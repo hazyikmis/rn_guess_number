@@ -32,3 +32,11 @@ Hence for all expo-\* packages, npm install can be used but expo install is the 
 - If you want to lock some of your screens as PORTRAIT for example, you must write the code below as as a first line in your code.
 
 `ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT);`
+
+# Using platform-specific code files
+
+- You can name your files like (If you have too much logic difference):
+  - MainButton.android.js
+  - MainButton.ios.js
+- and in your code, include/import these files just "MainButton", not with the extension "android" or "js", Expo automatically loads the required platform specific file. You do not need to check "if (Platform.OS === 'ios') "...
+-
